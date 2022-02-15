@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2021. All rights reserved.
+  ~ @author: Volodymyr Hryvinskyi <mailto:volodymyr@hryvinskyi.com>
+  -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Hryvinskyi\SeoImageOptimizerApi\Model\ImageParserInterface"
+                type="Hryvinskyi\SeoImageOptimizer\Model\ImageParser"/>
+    <preference for="Hryvinskyi\SeoImageOptimizerApi\Model\ConfigInterface"
+                type="Hryvinskyi\SeoImageOptimizer\Model\Config"/>
+    <preference for="Hryvinskyi\SeoImageOptimizerApi\Model\File\IsOriginalFileUpdatedInterface"
+                type="Hryvinskyi\SeoImageOptimizer\Model\File\IsOriginalFileUpdated"/>
+
+    <type name="Hryvinskyi\SeoImageOptimizerApi\Model\Convertor\ConvertorListing">
+        <arguments>
+            <argument name="convertors" xsi:type="array">
+                <item name="webp" xsi:type="array">
+                    <item name="object" xsi:type="object">Hryvinskyi\SeoImageOptimizer\Model\Convertor\Webp</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
+                </item>
+                <item name="avif" xsi:type="array">
+                    <item name="object" xsi:type="object">Hryvinskyi\SeoImageOptimizer\Model\Convertor\Avif</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
+                </item>
+                <item name="jp2" xsi:type="array">
+                    <item name="object" xsi:type="object">Hryvinskyi\SeoImageOptimizer\Model\Convertor\Jp2</item>
+                    <item name="sortOrder" xsi:type="number">30</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

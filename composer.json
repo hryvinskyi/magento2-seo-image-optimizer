@@ -1,0 +1,39 @@
+{
+    "name": "hryvinskyi/magento2-seo-image-optimizer",
+    "version": "1.0.0",
+    "description": "N/A",
+    "type": "magento2-module",
+    "require": {
+        "magento/framework": "*",
+        "hryvinskyi/magento2-base": "2.1.*",
+        "hryvinskyi/magento2-responsive-images": "1.0.*",
+        "hryvinskyi/magento2-seo-image-optimizer-api": "1.0.*"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest"
+    },
+    "license": [
+        "MIT"
+    ],
+    "authors": [
+        {
+            "name": "Volodymyr Hryvinskyi",
+            "email": "volodymyr@hryvinskyi.com"
+        }
+    ],
+    "scripts": {
+        "post-install-cmd": [
+            "php -r \"chmod( __DIR__ . '/hryvinskyi/magento2-seo-image-optimizer/bin/cavif', 0777);\"",
+            "php -r \"chmod( __DIR__ . '/hryvinskyi/magento2-seo-image-optimizer/bin/cwebp', 0777);\"",
+            "php -r \"chmod( __DIR__ . '/hryvinskyi/magento2-seo-image-optimizer/bin/magick', 0777);\""
+        ]
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Hryvinskyi\\SeoImageOptimizer\\": ""
+        }
+    }
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2021. All rights reserved.
+  ~ @author: Volodymyr Hryvinskyi <mailto:volodymyr@hryvinskyi.com>
+  -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <module name="Hryvinskyi_SeoImageOptimizer">
+        <sequence>
+            <module name="Hryvinskyi_Base"/>
+            <module name="Hryvinskyi_SeoImageOptimizerApi"/>
+        </sequence>
+    </module>
+</config>
