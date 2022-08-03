@@ -8,23 +8,15 @@ declare(strict_types=1);
 
 namespace Hryvinskyi\SeoImageOptimizer\Model\Convertor;
 
-use Hryvinskyi\ResponsiveImages\Module\ImageInterface;
-use Hryvinskyi\ResponsiveImages\Module\ImageInterfaceFactory;
-use Hryvinskyi\ResponsiveImages\Module\PictureInterface;
-use Hryvinskyi\ResponsiveImages\Module\SourceInterface;
-use Hryvinskyi\ResponsiveImages\Module\SourceInterfaceFactory;
-use Hryvinskyi\ResponsiveImages\Module\SrcInterface;
-use Hryvinskyi\ResponsiveImages\Module\SrcInterfaceFactory;
+use Hryvinskyi\SeoImageOptimizer\Model\Url\ConvertPathToUrlInterface;
+use Hryvinskyi\SeoImageOptimizer\Model\Url\ConvertUrlToPathInterface;
 use Hryvinskyi\SeoImageOptimizerApi\Model\ConfigInterface;
 use Hryvinskyi\SeoImageOptimizerApi\Model\Convertor\ConvertorInterface;
 use Hryvinskyi\SeoImageOptimizerApi\Model\File\IsOriginalFileUpdatedInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Driver\File as DriverFile;
 use Magento\Framework\Filesystem\Io\File;
 use Magento\Framework\Module\Dir;
-use Magento\Framework\UrlInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
@@ -34,71 +26,41 @@ abstract class CmdAbstractConvertor implements ConvertorInterface
     private Dir $dir;
     private File $file;
     private DriverFile $driverFile;
-    private Filesystem $filesystem;
-    private StoreManagerInterface $storeManager;
-    private ImageInterfaceFactory $imageFactory;
-    private SourceInterfaceFactory $sourceFactory;
-    private SrcInterfaceFactory $srcFactory;
     private ConfigInterface $config;
     private IsOriginalFileUpdatedInterface $isOriginalFileUpdated;
     private LoggerInterface $logger;
+    private ConvertPathToUrlInterface $convertPathToUrl;
+    private ConvertUrlToPathInterface $convertUrlToPath;
 
-    /**
-     * @param Dir $dir
-     * @param File $file
-     * @param DriverFile $driverFile
-     * @param Filesystem $filesystem
-     * @param StoreManagerInterface $storeManager
-     * @param ImageInterfaceFactory $imageFactory
-     * @param SourceInterfaceFactory $sourceFactory
-     * @param SrcInterfaceFactory $srcFactory
-     * @param ConfigInterface $config
-     * @param IsOriginalFileUpdatedInterface $isOriginalFileUpdated
-     * @param LoggerInterface $logger
-     */
     public function __construct(
         Dir $dir,
         File $file,
         DriverFile $driverFile,
-        Filesystem $filesystem,
-        StoreManagerInterface $storeManager,
-        ImageInterfaceFactory $imageFactory,
-        SourceInterfaceFactory $sourceFactory,
-        SrcInterfaceFactory $srcFactory,
         ConfigInterface $config,
         IsOriginalFileUpdatedInterface $isOriginalFileUpdated,
+        ConvertPathToUrlInterface $convertPathToUrl,
+        ConvertUrlToPathInterface $convertUrlToPath,
         LoggerInterface $logger
     ) {
         $this->dir = $dir;
         $this->file = $file;
         $this->driverFile = $driverFile;
-        $this->filesystem = $filesystem;
-        $this->storeManager = $storeManager;
-        $this->imageFactory = $imageFactory;
-        $this->sourceFactory = $sourceFactory;
-        $this->srcFactory = $srcFactory;
         $this->config = $config;
         $this->isOriginalFileUpdated = $isOriginalFileUpdated;
+        $this->convertPathToUrl = $convertPathToUrl;
+        $this->convertUrlToPath = $convertUrlToPath;
         $this->logger = $logger;
     }
 
     /**
      * @inheirtDoc
-     *
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function execute(
-        string $sourceImageTag,
-        string $sourceImageUri,
-        PictureInterface $picture,
-        ?string $destinationImageUri = null
-    ): void {
+    public function execute(string $sourceImageUri): ?string {
         if ($this->isEnabled() === false) {
-            return;
+            return null;
         }
 
-        $inputPath = $this->convertUrlToPath($sourceImageUri);
+        $inputPath = $this->convertUrlToPath->execute($sourceImageUri);
         $outputPath = $this->getOutputPath($inputPath, $this->imageType());
         $alreadyConverted = false;
 
@@ -116,14 +78,15 @@ abstract class CmdAbstractConvertor implements ConvertorInterface
         }
 
         if ($inputPath === $outputPath) {
-            return;
+            return null;
         }
 
-        $outputUrl = $this->convertPathToUrl($outputPath);
-        $picture->addSource($this->createSource()->addSrc($this->createSrc()->setUrl($outputUrl)));
+        return $this->convertPathToUrl->execute($outputPath);
     }
 
     /**
+     * Run command
+     *
      * @param string $inputPath
      * @param string $outputPath
      * @return string
@@ -131,20 +94,26 @@ abstract class CmdAbstractConvertor implements ConvertorInterface
     abstract public function cmd(string $inputPath, string $outputPath): string;
 
     /**
+     * Return image type
+     *
      * @return string
      */
     abstract public function imageType(): string;
 
     /**
+     * Check if convertor is enabled
+     *
      * @return bool
      */
     abstract public function isEnabled(): bool;
 
     /**
+     * Convert image
+     *
      * @param string $inputPath
-     * @param string|null $outputPath
+     * @param string $outputPath
      * @return string
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
      */
     public function convert(string $inputPath, string $outputPath): string
     {
@@ -171,38 +140,6 @@ abstract class CmdAbstractConvertor implements ConvertorInterface
     }
 
     /**
-     * @param string $url
-     * @return string
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    public function convertUrlToPath(string $url): string
-    {
-        $store = $this->storeManager->getStore();
-        $urlMedia = $store->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);
-        $urlStatic = $store->getBaseUrl(UrlInterface::URL_TYPE_STATIC);
-        $pathMedia = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath();
-        $pathStatic = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW)->getAbsolutePath();
-
-        return str_replace([$urlMedia, $urlStatic], [$pathMedia, $pathStatic], $url);
-    }
-
-    /**
-     * @param string $path
-     * @return string
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    public function convertPathToUrl(string $path): string
-    {
-        $store = $this->storeManager->getStore();
-        $urlMedia = $store->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);
-        $urlStatic = $store->getBaseUrl(UrlInterface::URL_TYPE_STATIC);
-        $pathMedia = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath();
-        $pathStatic = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW)->getAbsolutePath();
-
-        return str_replace([$pathMedia, $pathStatic], [$urlMedia, $urlStatic], $path);
-    }
-
-    /**
      * Is File Exists
      *
      * @param string $path
@@ -215,6 +152,8 @@ abstract class CmdAbstractConvertor implements ConvertorInterface
     }
 
     /**
+     * Return output path
+     *
      * @param string $inputPath
      * @param string $type
      * @return string
@@ -243,6 +182,8 @@ abstract class CmdAbstractConvertor implements ConvertorInterface
     }
 
     /**
+     * Return Logger
+     *
      * @return LoggerInterface
      */
     public function getLogger(): LoggerInterface
@@ -251,30 +192,8 @@ abstract class CmdAbstractConvertor implements ConvertorInterface
     }
 
     /**
-     * @return ImageInterface
-     */
-    public function createImage(): ImageInterface
-    {
-        return $this->imageFactory->create();
-    }
-
-    /**
-     * @return SourceInterface
-     */
-    public function createSource(): SourceInterface
-    {
-        return $this->sourceFactory->create();
-    }
-
-    /**
-     * @return SrcInterface
-     */
-    public function createSrc(): SrcInterface
-    {
-        return $this->srcFactory->create();
-    }
-
-    /**
+     * Return config
+     *
      * @return ConfigInterface
      */
     public function getConfig(): ConfigInterface
@@ -283,6 +202,8 @@ abstract class CmdAbstractConvertor implements ConvertorInterface
     }
 
     /**
+     * Return dir
+     *
      * @return Dir
      */
     public function getDir(): Dir

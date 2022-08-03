@@ -13,6 +13,16 @@
     <preference for="Hryvinskyi\SeoImageOptimizerApi\Model\File\IsOriginalFileUpdatedInterface"
                 type="Hryvinskyi\SeoImageOptimizer\Model\File\IsOriginalFileUpdated"/>
 
+    <preference for="Hryvinskyi\SeoImageOptimizer\Model\Url\ConvertPathToUrlInterface"
+                type="Hryvinskyi\SeoImageOptimizer\Model\Url\ConvertPathToUrl"/>
+    <preference for="Hryvinskyi\SeoImageOptimizer\Model\Url\ConvertUrlToPathInterface"
+                type="Hryvinskyi\SeoImageOptimizer\Model\Url\ConvertUrlToPath"/>
+    <preference for="Hryvinskyi\SeoImageOptimizer\Model\Url\IsImageOnSameServerInterface"
+                type="Hryvinskyi\SeoImageOptimizer\Model\Url\IsImageOnSameServer"/>
+
+    <preference for="Hryvinskyi\SeoImageOptimizer\Model\Image\IsParentTagPictureInterface"
+                type="Hryvinskyi\SeoImageOptimizer\Model\Image\IsParentTagPicture"/>
+
     <type name="Hryvinskyi\SeoImageOptimizerApi\Model\Convertor\ConvertorListing">
         <arguments>
             <argument name="convertors" xsi:type="array">
@@ -24,10 +34,10 @@
                     <item name="object" xsi:type="object">Hryvinskyi\SeoImageOptimizer\Model\Convertor\Avif</item>
                     <item name="sortOrder" xsi:type="number">20</item>
                 </item>
-                <item name="jp2" xsi:type="array">
-                    <item name="object" xsi:type="object">Hryvinskyi\SeoImageOptimizer\Model\Convertor\Jp2</item>
-                    <item name="sortOrder" xsi:type="number">30</item>
-                </item>
+<!--                <item name="jp2" xsi:type="array">-->
+<!--                    <item name="object" xsi:type="object">Hryvinskyi\SeoImageOptimizer\Model\Convertor\Jp2</item>-->
+<!--                    <item name="sortOrder" xsi:type="number">30</item>-->
+<!--                </item>-->
             </argument>
         </arguments>
     </type>
