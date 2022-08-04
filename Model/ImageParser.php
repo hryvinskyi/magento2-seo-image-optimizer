@@ -13,6 +13,7 @@ use Hryvinskyi\ResponsiveImages\Module\PictureInterfaceFactory;
 use Hryvinskyi\ResponsiveImages\Module\SourceInterfaceFactory;
 use Hryvinskyi\ResponsiveImages\Module\SrcInterfaceFactory;
 use Hryvinskyi\SeoImageOptimizer\Model\Url\IsImageOnSameServerInterface;
+use Hryvinskyi\SeoImageOptimizerApi\Model\ConfigInterface;
 use Hryvinskyi\SeoImageOptimizerApi\Model\Convertor\ConvertorListing;
 use Hryvinskyi\SeoImageOptimizerApi\Model\ImageParserInterface;
 use Psr\Log\LoggerInterface;
@@ -25,6 +26,7 @@ class ImageParser implements ImageParserInterface
     private SrcInterfaceFactory $srcFactory;
     private ImageInterfaceFactory $imageFactory;
     private IsImageOnSameServerInterface $isImageOnSameServer;
+    private ConfigInterface $config;
     private LoggerInterface $logger;
     private string $imgRegex;
     private string $sourceRegex;
@@ -37,6 +39,7 @@ class ImageParser implements ImageParserInterface
      * @param SrcInterfaceFactory $srcFactory
      * @param ImageInterfaceFactory $imageFactory
      * @param IsImageOnSameServerInterface $isImageOnSameServer
+     * @param ConfigInterface $config
      * @param LoggerInterface $logger
      * @param string $imgRegex
      * @param string $sourceRegex
@@ -49,6 +52,7 @@ class ImageParser implements ImageParserInterface
         SrcInterfaceFactory $srcFactory,
         ImageInterfaceFactory $imageFactory,
         IsImageOnSameServerInterface $isImageOnSameServer,
+        ConfigInterface $config,
         LoggerInterface $logger,
         string $imgRegex = '/<img([^<]+\s|\s)src=(\"|' . "\')([^<]+?\.(png|jpg|jpeg))[^<]+>(?!(<\/pic|\s*<\/pic))/mi",
         string $sourceRegex = '/<source([^<]+\s|\s)srcset=(\"|' . "\')([^<]+?\.(png|jpg|jpeg))[^<]+>(?!(<\/pic|\s*<\/pic))/mi",
@@ -60,6 +64,7 @@ class ImageParser implements ImageParserInterface
         $this->srcFactory = $srcFactory;
         $this->imageFactory = $imageFactory;
         $this->isImageOnSameServer = $isImageOnSameServer;
+        $this->config = $config;
         $this->logger = $logger;
         $this->imgRegex = $imgRegex;
         $this->sourceRegex = $sourceRegex;
@@ -218,7 +223,7 @@ class ImageParser implements ImageParserInterface
      */
     public function getExcludeImageAttributes(): string
     {
-        return '/(.*data-nooptimize=\"true\".*|.*\/media\/captcha\/.*)/mi';
+        return '/(' . implode('|', $this->config->getExcludeImageExpressionList()) . ')/mi';
     }
 
     /**
@@ -228,6 +233,6 @@ class ImageParser implements ImageParserInterface
      */
     public function getExcludePictureAttributes(): string
     {
-        return '/(.*data-nooptimize=\"true\".*|.*\/media\/captcha\/.*)/mi';
+        return '/(' . implode('|', $this->config->getExcludePictureExpressionList()) . ')/mi';
     }
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2021. All rights reserved.
+  ~ @author: Volodymyr Hryvinskyi <mailto:volodymyr@hryvinskyi.com>
+  -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <hryvinskyi_seo>
+            <image_optimizer>
+                <extreme_lazy_load>
+                    <enabled>0</enabled>
+                    <image_quality>80</image_quality>
+                    <enabled_webp>1</enabled_webp>
+                    <enabled_avif>1</enabled_avif>
+                    <exclude_image_expression><![CDATA[.*data-nooptimize="true".*
+.*/media/captcha/.*]]></exclude_image_expression>
+                    <exclude_picture_expression><![CDATA[.*data-nooptimize="true".*
+.*/media/captcha/.*]]></exclude_picture_expression>
+                </extreme_lazy_load>
+            </image_optimizer>
+        </hryvinskyi_seo>
+    </default>
+</config>

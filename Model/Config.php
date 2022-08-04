@@ -22,6 +22,8 @@ class Config implements ConfigInterface, DebugConfigInterface
     public const XML_CONF_ENABLED_WEBP = 'hryvinskyi_seo/image_optimizer/enabled_webp';
     public const XML_CONF_ENABLED_AVIF = 'hryvinskyi_seo/image_optimizer/enabled_avif';
     public const XML_CONF_ENABLED_JPG2 = 'hryvinskyi_seo/image_optimizer/enabled_jpg2';
+    public const XML_CONF_EXCLUDE_IMAGE_EXPRESSION = 'hryvinskyi_seo/image_optimizer/exclude_image_expression';
+    public const XML_CONF_EXCLUDE_PICTURE_EXPRESSION = 'hryvinskyi_seo/image_optimizer/exclude_picture_expression';
     public const XML_CONF_DEBUG = 'hryvinskyi_seo/image_quality/debug';
 
     /**
@@ -85,5 +87,40 @@ class Config implements ConfigInterface, DebugConfigInterface
     public function isEnabledJpg2(): bool
     {
         return $this->scopeConfig->isSetFlag(self::XML_CONF_ENABLED_JPG2);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getExcludeImageExpressionList(): array
+    {
+        $list = (string)$this->scopeConfig->getValue(self::XML_CONF_EXCLUDE_IMAGE_EXPRESSION);
+
+        $result = [];
+        foreach (explode(PHP_EOL, $list) as $expression) {
+            $expression = trim($expression);
+            if ($expression) {
+                $result[] = preg_quote($expression, '/');
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getExcludePictureExpressionList(): array
+    {
+        $list = (string)$this->scopeConfig->getValue(self::XML_CONF_EXCLUDE_PICTURE_EXPRESSION);
+        $result = [];
+        foreach (explode(PHP_EOL, $list) as $expression) {
+            $expression = trim($expression);
+            if ($expression) {
+                $result[] = preg_quote($expression, '/');
+            }
+        }
+
+        return $result;
     }
 }
