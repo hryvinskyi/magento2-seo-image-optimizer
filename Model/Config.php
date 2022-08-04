@@ -100,7 +100,7 @@ class Config implements ConfigInterface, DebugConfigInterface
         foreach (explode(PHP_EOL, $list) as $expression) {
             $expression = trim($expression);
             if ($expression) {
-                $result[] = preg_quote($expression, '/');
+                $result[] = $expression;
             }
         }
 
@@ -117,7 +117,7 @@ class Config implements ConfigInterface, DebugConfigInterface
         foreach (explode(PHP_EOL, $list) as $expression) {
             $expression = trim($expression);
             if ($expression) {
-                $result[] = preg_quote($expression, '/');
+                $result[] = $expression;
             }
         }
 

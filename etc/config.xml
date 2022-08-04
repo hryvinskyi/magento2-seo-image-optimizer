@@ -9,16 +9,14 @@
     <default>
         <hryvinskyi_seo>
             <image_optimizer>
-                <extreme_lazy_load>
-                    <enabled>0</enabled>
-                    <image_quality>80</image_quality>
-                    <enabled_webp>1</enabled_webp>
-                    <enabled_avif>1</enabled_avif>
-                    <exclude_image_expression><![CDATA[.*data-nooptimize="true".*
-.*/media/captcha/.*]]></exclude_image_expression>
-                    <exclude_picture_expression><![CDATA[.*data-nooptimize="true".*
-.*/media/captcha/.*]]></exclude_picture_expression>
-                </extreme_lazy_load>
+                <enabled>0</enabled>
+                <image_quality>80</image_quality>
+                <enabled_webp>1</enabled_webp>
+                <enabled_avif>1</enabled_avif>
+                <exclude_image_expression><![CDATA[.*data-nooptimize=\"true\".*
+.*\/media\/captcha\/.*]]></exclude_image_expression>
+                <exclude_picture_expression><![CDATA[.*data-nooptimize=\"true\".*
+.*\/media\/captcha\/.*]]></exclude_picture_expression>
             </image_optimizer>
         </hryvinskyi_seo>
     </default>
