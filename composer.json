@@ -7,7 +7,7 @@
         "magento/framework": "*",
         "hryvinskyi/magento2-logger": "1.0.*",
         "hryvinskyi/magento2-base": "2.1.*",
-        "hryvinskyi/magento2-responsive-images": "1.0.*",
+        "hryvinskyi/magento2-responsive-images": "^1.0",
         "hryvinskyi/magento2-seo-image-optimizer-api": "1.0.*"
     },
     "require-dev": {
