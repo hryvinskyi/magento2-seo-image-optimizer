@@ -202,8 +202,10 @@ class ImageParser implements ImageParserInterface
                     if (isset($newSources[$key]) === false) {
                         $newSources[$key] = $newSource;
                     }
-                    $outputUrl = $convertor->execute($imageUrl);
-                    $newSources[$key] = str_replace($imageUrl, $outputUrl, $newSources[$key]);
+
+                    if ($outputUrl = $convertor->execute($imageUrl)) {
+                        $newSources[$key] = str_replace($imageUrl, $outputUrl, $newSources[$key]);
+                    }
                 }
             }
 
