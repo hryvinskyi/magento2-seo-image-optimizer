@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Hryvinskyi\SeoImageOptimizer\Model\Convertor;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class Avif extends CmdAbstractConvertor
 {
     /**
@@ -15,7 +17,7 @@ class Avif extends CmdAbstractConvertor
      */
     public function cmd(string $inputPath, string $outputPath): string
     {
-        $cmd = $this->getDir()->getDir('Hryvinskyi_SeoImageOptimizer') . '/bin/cavif';
+        $cmd = $this->getDirectoryList()->getPath(DirectoryList::VAR_DIR) . '/hryvinskyi/bin/cavif';
         return $this->escapeShellArg($cmd) . ' "' . $inputPath . '" -Q ' . $this->getConfig()->imageQuality()
             . ' -o "' . $outputPath . '"';
     }

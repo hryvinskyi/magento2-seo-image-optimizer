@@ -16,6 +16,7 @@ use Hryvinskyi\SeoImageOptimizerApi\Model\File\IsOriginalFileUpdatedInterface;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Driver\File as DriverFile;
 use Magento\Framework\Filesystem\Io\File;
+use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\Module\Dir;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -28,9 +29,10 @@ abstract class CmdAbstractConvertor implements ConvertorInterface
     private DriverFile $driverFile;
     private ConfigInterface $config;
     private IsOriginalFileUpdatedInterface $isOriginalFileUpdated;
-    private LoggerInterface $logger;
     private ConvertPathToUrlInterface $convertPathToUrl;
     private ConvertUrlToPathInterface $convertUrlToPath;
+    private DirectoryList $directoryList;
+    private LoggerInterface $logger;
 
     public function __construct(
         Dir $dir,
@@ -40,6 +42,7 @@ abstract class CmdAbstractConvertor implements ConvertorInterface
         IsOriginalFileUpdatedInterface $isOriginalFileUpdated,
         ConvertPathToUrlInterface $convertPathToUrl,
         ConvertUrlToPathInterface $convertUrlToPath,
+        DirectoryList $directoryList,
         LoggerInterface $logger
     ) {
         $this->dir = $dir;
@@ -49,6 +52,7 @@ abstract class CmdAbstractConvertor implements ConvertorInterface
         $this->isOriginalFileUpdated = $isOriginalFileUpdated;
         $this->convertPathToUrl = $convertPathToUrl;
         $this->convertUrlToPath = $convertUrlToPath;
+        $this->directoryList = $directoryList;
         $this->logger = $logger;
     }
 
@@ -206,5 +210,15 @@ abstract class CmdAbstractConvertor implements ConvertorInterface
     public function getDir(): Dir
     {
         return $this->dir;
+    }
+
+    /**
+     * Return DirectoryList
+     *
+     * @return DirectoryList
+     */
+    public function getDirectoryList(): DirectoryList
+    {
+        return $this->directoryList;
     }
 }

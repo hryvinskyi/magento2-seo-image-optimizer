@@ -10,6 +10,7 @@ namespace Hryvinskyi\SeoImageOptimizer\Model\Convertor;
 
 use Hryvinskyi\ResponsiveImages\Module\PictureInterface;
 use Hryvinskyi\SeoImageOptimizerApi\Model\Convertor\ConvertorInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 class Webp extends CmdAbstractConvertor
 {
@@ -20,7 +21,7 @@ class Webp extends CmdAbstractConvertor
      */
     public function cmd(string $inputPath, string $outputPath): string
     {
-        $cmd = $this->getDir()->getDir('Hryvinskyi_SeoImageOptimizer') . '/bin/cwebp';
+        $cmd = $this->getDirectoryList()->getPath(DirectoryList::VAR_DIR) . '/hryvinskyi/bin/cwebp';
         return $this->escapeShellArg($cmd) . ' "' . $inputPath . '" -q ' . $this->getConfig()->imageQuality()
             . ' -alpha_q 100 -z 9 -m 6 -segments 4 -sns 80 -f 25 -sharpness 0 -strong -pass 10 -mt -alpha_method 1'
             . ' -alpha_filter fast  -o "' . $outputPath . '"';

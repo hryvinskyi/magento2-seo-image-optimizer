@@ -24,9 +24,13 @@
     ],
     "scripts": {
         "post-install-cmd": [
-            "php -r \"chmod( __DIR__ . '/hryvinskyi/magento2-seo-image-optimizer/bin/cavif', 0777);\"",
-            "php -r \"chmod( __DIR__ . '/hryvinskyi/magento2-seo-image-optimizer/bin/cwebp', 0777);\"",
-            "php -r \"chmod( __DIR__ . '/hryvinskyi/magento2-seo-image-optimizer/bin/magick', 0777);\""
+            "php -r \"mkdir( __DIR__ . '/../var/hryvinskyi/bin', 0700, true);\"",
+            "php -r \"copy( __DIR__ . '/hryvinskyi/magento2-seo-image-optimizer/bin/cavif',  __DIR__ . '/../var/hryvinskyi/bin/cavif');\"",
+            "php -r \"copy( __DIR__ . '/hryvinskyi/magento2-seo-image-optimizer/bin/cwebp',  __DIR__ . '/../var/hryvinskyi/bin/cwebp');\"",
+            "php -r \"copy( __DIR__ . '/hryvinskyi/magento2-seo-image-optimizer/bin/magick',  __DIR__ . '/../var/hryvinskyi/bin/magick');\"",
+            "php -r \"chmod( __DIR__ . '/../var/hryvinskyi/bin/cavif', 0777);\"",
+            "php -r \"chmod( __DIR__ . '/../var/hryvinskyi/bin/cwebp', 0777);\"",
+            "php -r \"chmod( __DIR__ . '/../var/hryvinskyi/bin/magick', 0777);\""
         ]
     },
     "autoload": {

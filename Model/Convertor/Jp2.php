@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Hryvinskyi\SeoImageOptimizer\Model\Convertor;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class Jp2 extends CmdAbstractConvertor
 {
     /**
@@ -15,7 +17,7 @@ class Jp2 extends CmdAbstractConvertor
      */
     public function cmd(string $inputPath, string $outputPath): string
     {
-        $cmd = $this->getDir()->getDir('Hryvinskyi_SeoImageOptimizer') . '/bin/magick';
+        $cmd = $this->getDirectoryList()->getPath(DirectoryList::VAR_DIR) . '/hryvinskyi/bin/magick';
         return $this->escapeShellArg($cmd) . ' "' . $inputPath . '" "' . $outputPath . '"';
     }
 
