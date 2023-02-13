@@ -63,7 +63,6 @@ abstract class CmdAbstractConvertor implements ConvertorInterface
         $inputPath = $this->convertUrlToPath->execute($sourceImageUri);
         $outputPath = $this->getOutputPath($inputPath, $this->imageType());
         $alreadyConverted = false;
-
         if ($this->isFileExists($outputPath)) {
             $alreadyConverted = true;
 
@@ -121,7 +120,6 @@ abstract class CmdAbstractConvertor implements ConvertorInterface
         if (!$this->driverFile->isDirectory($folder)) {
             $this->file->mkdir($folder, 0775);
         }
-
         try {
             $this->file->rm($outputPath);
             /** @noinspection PhpParamsInspection */
@@ -131,7 +129,6 @@ abstract class CmdAbstractConvertor implements ConvertorInterface
             $this->logger->error($exception->getMessage());
             return $inputPath;
         }
-
         if ($this->isFileExists($outputPath)) {
             return $outputPath;
         }

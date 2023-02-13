@@ -81,7 +81,6 @@ class ImageParser implements ImageParserInterface
     {
         $content = $this->processPictureTag($content);
         $content = $this->processImgTag($content);
-
         return $content;
     }
 

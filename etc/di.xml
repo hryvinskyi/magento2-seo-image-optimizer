@@ -41,4 +41,37 @@
             </argument>
         </arguments>
     </type>
+
+    <!-- Debugger -->
+    <virtualType name="Hryvinskyi\SeoImageOptimizer\Model\Handler" type="Hryvinskyi\Logger\Model\Handler">
+        <arguments>
+            <argument name="config" xsi:type="object">Hryvinskyi\SeoImageOptimizer\Model\Config</argument>
+            <argument name="fileName" xsi:type="string">/var/log/hryvinskyi/seo_image_optimizer.log</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Hryvinskyi\SeoImageOptimizer\Model\Logger" type="Hryvinskyi\Logger\Model\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">SeoImageOptimizer</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="error" xsi:type="object">Hryvinskyi\SeoImageOptimizer\Model\Handler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Hryvinskyi\SeoImageOptimizer\Model\Convertor\Avif">
+        <arguments>
+            <argument name="logger" xsi:type="object">Hryvinskyi\SeoImageOptimizer\Model\Logger</argument>
+        </arguments>
+    </type>
+    <type name="Hryvinskyi\SeoImageOptimizer\Model\Convertor\Jp2">
+        <arguments>
+            <argument name="logger" xsi:type="object">Hryvinskyi\SeoImageOptimizer\Model\Logger</argument>
+        </arguments>
+    </type>
+    <type name="Hryvinskyi\SeoImageOptimizer\Model\Convertor\Webp">
+        <arguments>
+            <argument name="logger" xsi:type="object">Hryvinskyi\SeoImageOptimizer\Model\Logger</argument>
+        </arguments>
+    </type>
 </config>

@@ -24,7 +24,7 @@ class Config implements ConfigInterface, DebugConfigInterface
     public const XML_CONF_ENABLED_JPG2 = 'hryvinskyi_seo/image_optimizer/enabled_jpg2';
     public const XML_CONF_EXCLUDE_IMAGE_EXPRESSION = 'hryvinskyi_seo/image_optimizer/exclude_image_expression';
     public const XML_CONF_EXCLUDE_PICTURE_EXPRESSION = 'hryvinskyi_seo/image_optimizer/exclude_picture_expression';
-    public const XML_CONF_DEBUG = 'hryvinskyi_seo/image_quality/debug';
+    public const XML_CONF_DEBUG = 'hryvinskyi_seo/image_optimizer/debug';
 
     /**
      * @var ScopeConfigInterface
