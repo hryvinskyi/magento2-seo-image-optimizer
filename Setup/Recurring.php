@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Hryvinskyi\SeoImageOptimizer\Setup;
 
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Setup\InstallSchemaInterface;
@@ -19,11 +20,13 @@ class Recurring implements InstallSchemaInterface
 {
     private Dir $moduleDir;
     private DriverInterface $filesystem;
+    private DirectoryList $directoryList;
 
-    public function __construct(Dir $moduleDir, DriverInterface $filesystem)
+    public function __construct(Dir $moduleDir, DriverInterface $filesystem, DirectoryList $directoryList)
     {
         $this->moduleDir = $moduleDir;
         $this->filesystem = $filesystem;
+        $this->directoryList = $directoryList;
     }
 
     /**
@@ -35,8 +38,21 @@ class Recurring implements InstallSchemaInterface
         ModuleContextInterface $context
     ) {
         $setup->startSetup();
-        $dir = $this->moduleDir->getDir('Hryvinskyi_SeoImageOptimizer');
-        $this->filesystem->changePermissionsRecursively($dir . '/bin/', 0755, 0777);
+        $dirVar = $this->directoryList->getPath(\Magento\Framework\App\Filesystem\DirectoryList::VAR_DIR) . '/hryvinskyi/bin/';
+        $dirModule = $this->moduleDir->getDir('Hryvinskyi_SeoImageOptimizer') . '/bin/';
+        try {
+            $this->filesystem->deleteDirectory($dirVar);
+        } catch (\Exception $e) {}
+
+        $this->filesystem->createDirectory($dirVar);
+        $this->filesystem->copy($dirModule . 'cavif', $dirVar . 'cavif');
+        $this->filesystem->copy($dirModule . 'cwebp', $dirVar . 'cwebp');
+        $this->filesystem->copy($dirModule . 'magick', $dirVar . 'magick');
+        $this->filesystem->changePermissionsRecursively(
+            $dirVar,
+            0755,
+            0777
+        );
         $setup->endSetup();
     }
 }
