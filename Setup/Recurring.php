@@ -10,7 +10,7 @@ namespace Hryvinskyi\SeoImageOptimizer\Setup;
 
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
@@ -19,10 +19,10 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 class Recurring implements InstallSchemaInterface
 {
     private Dir $moduleDir;
-    private DriverInterface $filesystem;
+    private File $filesystem;
     private DirectoryList $directoryList;
 
-    public function __construct(Dir $moduleDir, DriverInterface $filesystem, DirectoryList $directoryList)
+    public function __construct(Dir $moduleDir, File $filesystem, DirectoryList $directoryList)
     {
         $this->moduleDir = $moduleDir;
         $this->filesystem = $filesystem;
