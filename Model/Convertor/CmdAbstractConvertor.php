@@ -127,7 +127,7 @@ abstract class CmdAbstractConvertor implements ConvertorInterface
         try {
             $this->file->rm($outputPath);
             /** @noinspection PhpParamsInspection */
-            $process = new Process($this->cmd($inputPath, $outputPath));
+            $process = new Process([$this->cmd($inputPath, $outputPath)]);
             $process->mustRun();
         } catch (ProcessFailedException $exception) {
             $this->logger->error($exception->getMessage());
