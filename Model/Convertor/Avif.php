@@ -15,11 +15,17 @@ class Avif extends CmdAbstractConvertor
     /**
      * @inheritDoc
      */
-    public function cmd(string $inputPath, string $outputPath): string
+    public function cmd(string $inputPath, string $outputPath): array
     {
         $cmd = $this->getDirectoryList()->getPath(DirectoryList::VAR_DIR) . '/hryvinskyi/bin/cavif';
-        return $this->escapeShellArg($cmd) . ' "' . $inputPath . '" -Q ' . $this->getConfig()->imageQuality()
-            . ' -o "' . $outputPath . '"';
+        return [
+            $cmd,
+            $this->escapeShellArg($inputPath),
+            '-Q',
+            $this->getConfig()->imageQuality(),
+            '-o',
+            $this->escapeShellArg($outputPath),
+        ];
     }
 
     /**

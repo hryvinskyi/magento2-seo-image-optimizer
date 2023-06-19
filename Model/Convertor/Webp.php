@@ -19,12 +19,39 @@ class Webp extends CmdAbstractConvertor
      * @param string $outputPath
      * @return string
      */
-    public function cmd(string $inputPath, string $outputPath): string
+    public function cmd(string $inputPath, string $outputPath): array
     {
         $cmd = $this->getDirectoryList()->getPath(DirectoryList::VAR_DIR) . '/hryvinskyi/bin/cwebp';
-        return $this->escapeShellArg($cmd) . ' "' . $inputPath . '" -q ' . $this->getConfig()->imageQuality()
-            . ' -alpha_q 100 -z 9 -m 6 -segments 4 -sns 80 -f 25 -sharpness 0 -strong -pass 10 -mt -alpha_method 1'
-            . ' -alpha_filter fast  -o "' . $outputPath . '"';
+        return [
+            $cmd,
+            $this->escapeShellArg($inputPath),
+            '-q',
+            $this->getConfig()->imageQuality(),
+            '-alpha_q',
+            '100',
+            '-z',
+            '9',
+            '-m',
+            '6',
+            '-segments',
+            '4',
+            '-sns',
+            '80',
+            '-f',
+            '25',
+            '-sharpness',
+            '0',
+            '-strong',
+            '-pass',
+            '10',
+            '-mt',
+            '-alpha_method',
+            '1',
+            '-alpha_filter',
+            'fast',
+            '-o',
+            $this->escapeShellArg($outputPath),
+        ];
     }
 
     /**

@@ -33,8 +33,9 @@ class ConvertUrlToPath implements ConvertUrlToPathInterface
         $pathMedia = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath();
         $pathStatic = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW)->getAbsolutePath();
         $pathRoot = $this->filesystem->getDirectoryRead(DirectoryList::PUB)->getAbsolutePath();
+        $baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_DIRECT_LINK);
 
-        if (strpos($url, $store->getBaseUrl()) === 0) {
+        if (strpos($url, $baseUrl) === 0) {
             return str_replace(
                 [$store->getBaseUrl(UrlInterface::URL_TYPE_MEDIA), $store->getBaseUrl(UrlInterface::URL_TYPE_STATIC)],
                 [$pathMedia, $pathStatic],

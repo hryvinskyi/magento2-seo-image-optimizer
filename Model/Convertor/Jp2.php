@@ -15,10 +15,18 @@ class Jp2 extends CmdAbstractConvertor
     /**
      * @inheritDoc
      */
-    public function cmd(string $inputPath, string $outputPath): string
+    public function cmd(string $inputPath, string $outputPath): array
     {
         $cmd = $this->getDirectoryList()->getPath(DirectoryList::VAR_DIR) . '/hryvinskyi/bin/magick';
-        return $this->escapeShellArg($cmd) . ' "' . $inputPath . '" "' . $outputPath . '"';
+        return [
+            $cmd,
+            $this->escapeShellArg($inputPath),
+            '-quality',
+            $this->getConfig()->imageQuality(),
+            '-define',
+            'jp2:rate=' . $this->getConfig()->imageQuality(),
+            $this->escapeShellArg($outputPath),
+        ];
     }
 
     /**
