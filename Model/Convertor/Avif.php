@@ -20,11 +20,11 @@ class Avif extends CmdAbstractConvertor
         $cmd = $this->getDirectoryList()->getPath(DirectoryList::VAR_DIR) . '/hryvinskyi/bin/cavif';
         return [
             $cmd,
-            $this->escapeShellArg($inputPath),
+            $inputPath,
             '-Q',
             $this->getConfig()->imageQuality(),
             '-o',
-            $this->escapeShellArg($outputPath),
+            $outputPath,
         ];
     }
 
