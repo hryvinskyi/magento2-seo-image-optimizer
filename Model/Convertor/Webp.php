@@ -24,7 +24,7 @@ class Webp extends CmdAbstractConvertor
         $cmd = $this->getDirectoryList()->getPath(DirectoryList::VAR_DIR) . '/hryvinskyi/bin/cwebp';
         return [
             $cmd,
-            $this->escapeShellArg($inputPath),
+            $inputPath,
             '-q',
             $this->getConfig()->imageQuality(),
             '-alpha_q',
@@ -50,7 +50,7 @@ class Webp extends CmdAbstractConvertor
             '-alpha_filter',
             'fast',
             '-o',
-            $this->escapeShellArg($outputPath),
+            $outputPath,
         ];
     }
 
